@@ -17,7 +17,8 @@ type App interface {
 }
 
 func Run(a App) (err error) {
-	startCtx := context.Background()
+	startCtx, startCancel := context.WithTimeout(context.Background(), a.GetStartTimeout())
+	defer startCancel()
 
 	if err := a.Start(startCtx); err != nil {
 		return err
